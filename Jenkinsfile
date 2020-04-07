@@ -11,14 +11,14 @@ pipeline {
         }
         stage("Run Automated Tests"){
             steps{
-                sh "docker compose up automation_service"
+                sh "docker-compose up automation_service"
             }
         }
     }
     post{
         always{
             archiveArtifacts artifacts: 'output/**'
-            sh "docker compose down"
+            sh "docker-compose down"
         }
     }
 }
