@@ -1,0 +1,31 @@
+version: "3.7"
+services: 
+    seleniumhub:
+        image: selenium/hub
+    chromenode :
+        image: selenium/node-chrome-debug
+        links:
+            - seleniumhub
+        environment:
+            - HUB_HOST=seleniumhub
+            - NODE_MAX_INSTANCES=5
+            - NODE_MAX_SESSION=5
+    firefoxnode :
+        image: selenium/node-firefox-debug
+        links:
+            - seleniumhub
+        environment: 
+            - HUB_HOST=seleniumhub
+            - NODE_MAX_INSTANCES=5
+            - NODE_MAX_SESSION=5
+    automation_service :
+        image: ayushvipinjain/selenium_docker_jenkins
+        links:
+          - chromenode
+          - firefoxnode
+        environment:
+          - HUB_HOST=seleniumhub
+          - TestNGFile=crossbrowser.xml
+        volumes:
+        - ./container_output:/tmp/automation/test-output
+
